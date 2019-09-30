@@ -18,8 +18,15 @@ int main() {
     char *str = (char *) calloc (STRSIZE, sizeof(char));
     scanf ("%s", str);
     int len = StrLen (str), sets = 0;
-    struct s_list *s_start = StrHandle(str, len, &sets);
-    StrBruteForce(s_start, sets, s_start, str);
+    struct s_list *s_start = StrHandle (str, len, &sets);
+    StrBruteForce (s_start, sets, s_start, str);
+    s_list *ptr = s_start;
+    do {
+        s_start = ptr;
+        ptr = s_start->next;
+        free (s_start);
+    } while (ptr != nullptr);
+    free (str);
     return 0;
 }
 
@@ -63,12 +70,12 @@ void StrPrint (char *str, struct s_list *s_start) {
 
 void StrBruteForce (struct s_list *s_start, int sets, struct s_list *s0, char *str) {
     if (sets == 0) {
-        StrPrint(str, s0);
+        StrPrint (str, s0);
         return;
     }
     for (int i = 0; i < (*(s_start->sym) - '0') - 2; ++i) {
         s_start->delta += i;
-        StrBruteForce(s_start->next, sets - 1, s0, str);
+        StrBruteForce (s_start->next, sets - 1, s0, str);
         s_start->delta -= i;
     }
 }
